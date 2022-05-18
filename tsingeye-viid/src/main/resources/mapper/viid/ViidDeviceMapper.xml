@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsingeye.viid.mapper.ViidDeviceMapper">
+
+    <resultMap id="ViidDeviceResult" type="com.tsingeye.viid.domain.ViidDeviceVo">
+        <id property="id" column="id"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="registerTime" column="register_time"/>
+        <result property="keepAliveTime" column="keep_alive_time"/>
+        <result property="status" column="status"/>
+        <result property="enable" column="enable"/>
+        <result property="ip" column="ip"/>
+    </resultMap>
+
+    <sql id="selectVdsInfoDeviceSql">
+        select id, device_id, register_time, keep_alive_time, status, enable, ip
+        from viid_device
+    </sql>
+
+    <!--新增-->
+    <insert id="insert" parameterType="viidDeviceVo">
+        insert into viid_device (
+        <if test="id != null">id,</if>
+        <if test="deviceId != null and deviceId != ''">device_id,</if>
+        <if test="registerTime != null">register_time,</if>
+        <if test="keepAliveTime != null">keep_alive_time,</if>
+        <if test="status != null">status,</if>
+        <if test="enable != null">enable,</if>
+        <if test="ip != null and ip != ''">ip</if>
+        )
+        values
+        (
+        <if test="id != null">#{id},</if>
+        <if test="deviceId != null and deviceId != ''">#{deviceId},</if>
+        <if test="registerTime != null">#{registerTime},</if>
+        <if test="keepAliveTime != null">#{keepAliveTime},</if>
+        <if test="status != null">#{status},</if>
+        <if test="enable != null">#{enable},</if>
+        <if test="ip != null and ip != ''">#{ip}</if>
+        )
+    </insert>
+
+
+    <!--根据编号更新-->
+    <update id="updateById" parameterType="viidDeviceVo">
+        update viid_device
+        <set>
+            <if test="deviceId != null and deviceId != ''">device_id = #{deviceId},</if>
+            <if test="registerTime != null">register_time = #{registerTime},</if>
+            <if test="keepAliveTime != null">keep_alive_time = #{keepAliveTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="enable != null">enable = #{enable},</if>
+            <if test="ip != null and ip !=''">ip = #{ip},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--获取设备列表-->
+    <select id="getDeviceList" resultMap="ViidDeviceResult">
+        <include refid="selectVdsInfoDeviceSql"/>
+    </select>
+
+    <!--根据设备编号查询设备-->
+    <select id="getDeviceByDeviceId" parameterType="String" resultMap="ViidDeviceResult">
+        <include refid="selectVdsInfoDeviceSql"/>
+        where device_id = #{deviceId}
+    </select>
+
+
+    <!--根据启用状态查询设备列表-->
+    <select id="findDeviceByEnable" parameterType="Integer" resultMap="ViidDeviceResult">
+        <include refid="selectVdsInfoDeviceSql"/>
+        where enable = #{enable}
+    </select>
+
+    <resultMap type="ViidDevice" id="ViidDeviceRe">
+        <result property="id" column="id"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="registerTime" column="register_time"/>
+        <result property="keepAliveTime" column="keep_alive_time"/>
+        <result property="status" column="status"/>
+        <result property="enable" column="enable"/>
+        <result property="ip" column="ip"/>
+        <result property="dictConver" column="dict_conver"/>
+        <result property="formatClean" column="format_clean"/>
+        <result property="encryptPush" column="encrypt_push"/>
+        <result property="decryptPush" column="decrypt_push"/>
+        <result property="name" column="name"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+        <result property="police" column="police"/>
+        <result property="type" column="type"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectViidDeviceVo">
+        select id,
+               device_id,
+               register_time,
+               keep_alive_time,
+               status,
+               enable,
+               ip,
+               dict_conver,
+               format_clean,
+               encrypt_push,
+               decrypt_push,
+               name,
+               longitude,
+               latitude,
+               police,
+               type,
+               create_time
+        from viid_device
+    </sql>
+
+    <select id="selectViidDeviceList" parameterType="ViidDevice" resultMap="ViidDeviceRe">
+        <include refid="selectViidDeviceVo"/>
+        <where>
+            <if test="deviceId != null  and deviceId != ''">and device_id = #{deviceId}</if>
+            <if test="registerTime != null  and registerTime != ''">and register_time = #{registerTime}</if>
+            <if test="keepAliveTime != null  and keepAliveTime != ''">and keep_alive_time = #{keepAliveTime}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="enable != null ">and enable = #{enable}</if>
+            <if test="ip != null  and ip != ''">and ip = #{ip}</if>
+            <if test="dictConver != null ">and dict_conver = #{dictConver}</if>
+            <if test="formatClean != null ">and format_clean = #{formatClean}</if>
+            <if test="encryptPush != null ">and encrypt_push = #{encryptPush}</if>
+            <if test="decryptPush != null ">and decrypt_push = #{decryptPush}</if>
+            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="longitude != null ">and longitude = #{longitude}</if>
+            <if test="latitude != null ">and latitude = #{latitude}</if>
+            <if test="police != null  and police != ''">and police = #{police}</if>
+            <if test="type != null  and type != ''">and type = #{type}</if>
+        </where>
+    </select>
+
+    <select id="selectViidDeviceById" parameterType="String" resultMap="ViidDeviceRe">
+        <include refid="selectViidDeviceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertViidDevice" parameterType="ViidDevice">
+        insert into viid_device
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="deviceId != null">device_id,</if>
+            <if test="registerTime != null">register_time,</if>
+            <if test="keepAliveTime != null">keep_alive_time,</if>
+            <if test="status != null">status,</if>
+            <if test="enable != null">enable,</if>
+            <if test="ip != null">ip,</if>
+            <if test="dictConver != null">dict_conver,</if>
+            <if test="formatClean != null">format_clean,</if>
+            <if test="encryptPush != null">encrypt_push,</if>
+            <if test="decryptPush != null">decrypt_push,</if>
+            <if test="name != null">name,</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="latitude != null">latitude,</if>
+            <if test="police != null">police,</if>
+            <if test="type != null">type,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="registerTime != null">#{registerTime},</if>
+            <if test="keepAliveTime != null">#{keepAliveTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="enable != null">#{enable},</if>
+            <if test="ip != null">#{ip},</if>
+            <if test="dictConver != null">#{dictConver},</if>
+            <if test="formatClean != null">#{formatClean},</if>
+            <if test="encryptPush != null">#{encryptPush},</if>
+            <if test="decryptPush != null">#{decryptPush},</if>
+            <if test="name != null">#{name},</if>
+            <if test="longitude != null">#{longitude},</if>
+            <if test="latitude != null">#{latitude},</if>
+            <if test="police != null">#{police},</if>
+            <if test="type != null">#{type},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateViidDevice" parameterType="ViidDevice">
+        update viid_device
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deviceId != null">device_id = #{deviceId},</if>
+            <if test="registerTime != null">register_time = #{registerTime},</if>
+            <if test="keepAliveTime != null">keep_alive_time = #{keepAliveTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="enable != null">enable = #{enable},</if>
+            <if test="ip != null">ip = #{ip},</if>
+            <if test="dictConver != null">dict_conver = #{dictConver},</if>
+            <if test="formatClean != null">format_clean = #{formatClean},</if>
+            <if test="encryptPush != null">encrypt_push = #{encryptPush},</if>
+            <if test="decryptPush != null">decrypt_push = #{decryptPush},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="longitude != null">longitude = #{longitude},</if>
+            <if test="latitude != null">latitude = #{latitude},</if>
+            <if test="police != null">police = #{police},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteViidDeviceById" parameterType="String">
+        delete
+        from viid_device
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteViidDeviceByIds" parameterType="String">
+        delete from viid_device where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

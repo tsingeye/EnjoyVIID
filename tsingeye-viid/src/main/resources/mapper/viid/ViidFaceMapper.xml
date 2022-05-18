@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsingeye.viid.mapper.ViidFaceMapper">
+
+    <resultMap id="ViidFaceResult" type="com.tsingeye.viid.domain.ViidFace">
+        <id property="id" column="id"/>
+        <result property="faceId" column="face_id"/>
+        <result property="infoKind" column="info_kind"/>
+        <result property="sourceId" column="source_id"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="shotTime" column="shot_time"/>
+        <result property="leftTopX" column="left_top_x"/>
+        <result property="leftTopY" column="left_top_y"/>
+        <result property="rightBtmX" column="right_btm_x"/>
+        <result property="rightBtmY" column="right_btm_y"/>
+        <result property="locationMarkTime" column="location_mark_time"/>
+        <result property="faceAppearTime" column="face_appear_time"/>
+        <result property="faceDisAppearTime" column="face_dis_appear_time"/>
+        <result property="genderCode" column="gender_code"/>
+        <result property="ageUpLimit" column="age_up_limit"/>
+        <result property="ageLowerLimit" column="age_lower_limit"/>
+        <result property="glassStyle" column="glass_style"/>
+        <result property="emotion" column="emotion"/>
+        <result property="isDriver" column="is_driver"/>
+        <result property="isForeigner" column="is_foreigner"/>
+        <result property="isSuspectedTerrorist" column="is_suspected_terrorist"/>
+        <result property="isCriminalInvolved" column="is_criminal_involved"/>
+        <result property="isDetainess" column="is_detainess"/>
+        <result property="isVictim" column="is_victim"/>
+        <result property="isSuspiciousPerson" column="is_suspicious_person"/>
+        <result property="similaritydegree" column="similaritydegree"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectViidFaceVo">
+        select id,
+               face_id,
+               info_kind,
+               source_id,
+               device_id,
+               shot_time,
+               left_top_x,
+               left_top_y,
+               right_btm_x,
+               right_btm_y,
+               location_mark_time,
+               face_appear_time,
+               face_dis_appear_time,
+               gender_code,
+               age_up_limit,
+               age_lower_limit,
+               glass_style,
+               emotion,
+               is_driver,
+               is_foreigner,
+               is_suspected_terrorist,
+               is_criminal_involved,
+               is_detainess,
+               is_victim,
+               is_suspicious_person,
+               similaritydegree,
+               remark,
+               create_time
+        from viid_face
+    </sql>
+
+    <!--批量新增face-->
+    <insert id="insertBatch">
+        insert into viid_face(id, face_id, info_kind, source_id, device_id, shot_time, left_top_x, left_top_y,
+        right_btm_x, right_btm_y, location_mark_time, face_appear_time, face_dis_appear_time,
+        gender_code, age_up_limit, age_lower_limit, glass_style, emotion, is_driver, is_foreigner,
+        is_suspected_terrorist, is_criminal_involved, is_detainess, is_victim,
+        is_suspicious_person,
+        similaritydegree, remark, create_time)
+        values
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item.id},
+            #{item.faceId},
+            #{item.infoKind},
+            #{item.sourceId},
+            #{item.deviceId},
+            #{item.shotTime},
+            #{item.leftTopX},
+            #{item.leftTopY},
+            #{item.rightBtmX},
+            #{item.rightBtmY},
+            #{item.locationMarkTime},
+            #{item.faceAppearTime},
+            #{item.faceDisAppearTime},
+            #{item.genderCode},
+            #{item.ageUpLimit},
+            #{item.ageLowerLimit},
+            #{item.glassStyle},
+            #{item.emotion},
+            #{item.isDriver},
+            #{item.isForeigner},
+            #{item.isSuspectedTerrorist},
+            #{item.isCriminalInvolved},
+            #{item.isDetainess},
+            #{item.isVictim},
+            #{item.isSuspiciousPerson},
+            #{item.similaritydegree},
+            #{item.remark},
+            #{item.createTime}
+        </foreach>
+    </insert>
+
+    <select id="selectViidFaceList" parameterType="ViidFace" resultMap="ViidFaceResult">
+        <include refid="selectViidFaceVo"/>
+        <where>
+            <if test="faceId != null  and faceId != ''">and face_id = #{faceId}</if>
+            <if test="infoKind != null  and infoKind != ''">and info_kind = #{infoKind}</if>
+            <if test="sourceId != null  and sourceId != ''">and source_id = #{sourceId}</if>
+            <if test="deviceId != null  and deviceId != ''">and device_id = #{deviceId}</if>
+            <if test="shotTime != null ">and shot_time = #{shotTime}</if>
+            <if test="leftTopX != null  and leftTopX != ''">and left_top_x = #{leftTopX}</if>
+            <if test="leftTopY != null  and leftTopY != ''">and left_top_y = #{leftTopY}</if>
+            <if test="rightBtmX != null  and rightBtmX != ''">and right_btm_x = #{rightBtmX}</if>
+            <if test="rightBtmY != null  and rightBtmY != ''">and right_btm_y = #{rightBtmY}</if>
+            <if test="locationMarkTime != null ">and location_mark_time = #{locationMarkTime}</if>
+            <if test="faceAppearTime != null ">and face_appear_time = #{faceAppearTime}</if>
+            <if test="faceDisAppearTime != null ">and face_dis_appear_time = #{faceDisAppearTime}</if>
+            <if test="genderCode != null  and genderCode != ''">and gender_code = #{genderCode}</if>
+            <if test="ageUpLimit != null  and ageUpLimit != ''">and age_up_limit = #{ageUpLimit}</if>
+            <if test="ageLowerLimit != null  and ageLowerLimit != ''">and age_lower_limit = #{ageLowerLimit}</if>
+            <if test="glassStyle != null  and glassStyle != ''">and glass_style = #{glassStyle}</if>
+            <if test="emotion != null  and emotion != ''">and emotion = #{emotion}</if>
+            <if test="isDriver != null  and isDriver != ''">and is_driver = #{isDriver}</if>
+            <if test="isForeigner != null  and isForeigner != ''">and is_foreigner = #{isForeigner}</if>
+            <if test="isSuspectedTerrorist != null  and isSuspectedTerrorist != ''">and is_suspected_terrorist =
+                #{isSuspectedTerrorist}
+            </if>
+            <if test="isCriminalInvolved != null  and isCriminalInvolved != ''">and is_criminal_involved =
+                #{isCriminalInvolved}
+            </if>
+            <if test="isDetainess != null  and isDetainess != ''">and is_detainess = #{isDetainess}</if>
+            <if test="isVictim != null  and isVictim != ''">and is_victim = #{isVictim}</if>
+            <if test="isSuspiciousPerson != null  and isSuspiciousPerson != ''">and is_suspicious_person =
+                #{isSuspiciousPerson}
+            </if>
+            <if test="similaritydegree != null  and similaritydegree != ''">and similaritydegree = #{similaritydegree}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectViidFaceById" parameterType="String" resultMap="ViidFaceResult">
+        <include refid="selectViidFaceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertViidFace" parameterType="ViidFace">
+        insert into viid_face
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="faceId != null">face_id,</if>
+            <if test="infoKind != null">info_kind,</if>
+            <if test="sourceId != null">source_id,</if>
+            <if test="deviceId != null">device_id,</if>
+            <if test="shotTime != null">shot_time,</if>
+            <if test="leftTopX != null">left_top_x,</if>
+            <if test="leftTopY != null">left_top_y,</if>
+            <if test="rightBtmX != null">right_btm_x,</if>
+            <if test="rightBtmY != null">right_btm_y,</if>
+            <if test="locationMarkTime != null">location_mark_time,</if>
+            <if test="faceAppearTime != null">face_appear_time,</if>
+            <if test="faceDisAppearTime != null">face_dis_appear_time,</if>
+            <if test="genderCode != null">gender_code,</if>
+            <if test="ageUpLimit != null">age_up_limit,</if>
+            <if test="ageLowerLimit != null">age_lower_limit,</if>
+            <if test="glassStyle != null">glass_style,</if>
+            <if test="emotion != null">emotion,</if>
+            <if test="isDriver != null">is_driver,</if>
+            <if test="isForeigner != null">is_foreigner,</if>
+            <if test="isSuspectedTerrorist != null">is_suspected_terrorist,</if>
+            <if test="isCriminalInvolved != null">is_criminal_involved,</if>
+            <if test="isDetainess != null">is_detainess,</if>
+            <if test="isVictim != null">is_victim,</if>
+            <if test="isSuspiciousPerson != null">is_suspicious_person,</if>
+            <if test="similaritydegree != null">similaritydegree,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="faceId != null">#{faceId},</if>
+            <if test="infoKind != null">#{infoKind},</if>
+            <if test="sourceId != null">#{sourceId},</if>
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="shotTime != null">#{shotTime},</if>
+            <if test="leftTopX != null">#{leftTopX},</if>
+            <if test="leftTopY != null">#{leftTopY},</if>
+            <if test="rightBtmX != null">#{rightBtmX},</if>
+            <if test="rightBtmY != null">#{rightBtmY},</if>
+            <if test="locationMarkTime != null">#{locationMarkTime},</if>
+            <if test="faceAppearTime != null">#{faceAppearTime},</if>
+            <if test="faceDisAppearTime != null">#{faceDisAppearTime},</if>
+            <if test="genderCode != null">#{genderCode},</if>
+            <if test="ageUpLimit != null">#{ageUpLimit},</if>
+            <if test="ageLowerLimit != null">#{ageLowerLimit},</if>
+            <if test="glassStyle != null">#{glassStyle},</if>
+            <if test="emotion != null">#{emotion},</if>
+            <if test="isDriver != null">#{isDriver},</if>
+            <if test="isForeigner != null">#{isForeigner},</if>
+            <if test="isSuspectedTerrorist != null">#{isSuspectedTerrorist},</if>
+            <if test="isCriminalInvolved != null">#{isCriminalInvolved},</if>
+            <if test="isDetainess != null">#{isDetainess},</if>
+            <if test="isVictim != null">#{isVictim},</if>
+            <if test="isSuspiciousPerson != null">#{isSuspiciousPerson},</if>
+            <if test="similaritydegree != null">#{similaritydegree},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateViidFace" parameterType="ViidFace">
+        update viid_face
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="faceId != null">face_id = #{faceId},</if>
+            <if test="infoKind != null">info_kind = #{infoKind},</if>
+            <if test="sourceId != null">source_id = #{sourceId},</if>
+            <if test="deviceId != null">device_id = #{deviceId},</if>
+            <if test="shotTime != null">shot_time = #{shotTime},</if>
+            <if test="leftTopX != null">left_top_x = #{leftTopX},</if>
+            <if test="leftTopY != null">left_top_y = #{leftTopY},</if>
+            <if test="rightBtmX != null">right_btm_x = #{rightBtmX},</if>
+            <if test="rightBtmY != null">right_btm_y = #{rightBtmY},</if>
+            <if test="locationMarkTime != null">location_mark_time = #{locationMarkTime},</if>
+            <if test="faceAppearTime != null">face_appear_time = #{faceAppearTime},</if>
+            <if test="faceDisAppearTime != null">face_dis_appear_time = #{faceDisAppearTime},</if>
+            <if test="genderCode != null">gender_code = #{genderCode},</if>
+            <if test="ageUpLimit != null">age_up_limit = #{ageUpLimit},</if>
+            <if test="ageLowerLimit != null">age_lower_limit = #{ageLowerLimit},</if>
+            <if test="glassStyle != null">glass_style = #{glassStyle},</if>
+            <if test="emotion != null">emotion = #{emotion},</if>
+            <if test="isDriver != null">is_driver = #{isDriver},</if>
+            <if test="isForeigner != null">is_foreigner = #{isForeigner},</if>
+            <if test="isSuspectedTerrorist != null">is_suspected_terrorist = #{isSuspectedTerrorist},</if>
+            <if test="isCriminalInvolved != null">is_criminal_involved = #{isCriminalInvolved},</if>
+            <if test="isDetainess != null">is_detainess = #{isDetainess},</if>
+            <if test="isVictim != null">is_victim = #{isVictim},</if>
+            <if test="isSuspiciousPerson != null">is_suspicious_person = #{isSuspiciousPerson},</if>
+            <if test="similaritydegree != null">similaritydegree = #{similaritydegree},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteViidFaceById" parameterType="String">
+        delete
+        from viid_face
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteViidFaceByIds" parameterType="String">
+        delete from viid_face where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+</mapper>

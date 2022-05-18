@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsingeye.viid.mapper.ViidFaceImageMapper">
+
+    <resultMap id="ViidDeviceResult" type="com.tsingeye.viid.domain.SubImageInfo">
+        <id property="id" column="id"/>
+        <result property="faceId" column="face_id"/>
+        <result property="imageId" column="image_id"/>
+        <result property="eventSort" column="event_sort"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="storagePath" column="storage_path"/>
+        <result property="type" column="type"/>
+        <result property="fileFormat" column="file_format"/>
+        <result property="shotTime" column="shot_time"/>
+        <result property="width" column="width"/>
+        <result property="height" column="height"/>
+        <result property="data" column="data"/>
+        <result property="dataBytes" column="data_bytes"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectVdsInfoDeviceSql">
+        select id,
+               face_id,
+               image_id,
+               event_sort,
+               device_id,
+               storage_path,
+               `type`,
+               file_format,
+               shot_time,
+               width,
+               height,
+               image_url,
+               create_time
+        from viid_face_image
+    </sql>
+
+    <!--批量新增faceImages-->
+    <insert id="insertBatch">
+        insert into viid_face_image
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            face_id,
+            image_id,
+            event_sort,
+            device_id,
+            storage_path,
+            `type`,
+            file_format,
+            shot_time,
+            width,
+            height,
+            image_url,
+            data_bytes,
+            create_time
+        </trim>
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.faceId},
+                #{item.imageId},
+                #{item.eventSort},
+                #{item.deviceId},
+                #{item.storagePath},
+                #{item.type},
+                #{item.fileFormat},
+                #{item.shotTime},
+                #{item.width},
+                #{item.height},
+                #{item.imageUrl},
+                #{item.dataBytes},
+                #{item.createTime}
+            </trim>
+        </foreach>
+    </insert>
+
+
+    <resultMap type="ViidFaceImage" id="ViidFaceImageResult">
+        <id property="id" column="id"/>
+        <result property="faceId" column="face_id"/>
+        <result property="imageId" column="image_id"/>
+        <result property="eventSort" column="event_sort"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="storagePath" column="storage_path"/>
+        <result property="type" column="type"/>
+        <result property="fileFormat" column="file_format"/>
+        <result property="shotTime" column="shot_time"/>
+        <result property="width" column="width"/>
+        <result property="height" column="height"/>
+        <result property="data" column="data"/>
+        <result property="dataBytes" column="data_bytes"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectViidFaceImageVo">
+        select id,
+               face_id,
+               image_id,
+               event_sort,
+               device_id,
+               storage_path,
+               `type`,
+               file_format,
+               shot_time,
+               width,
+               height,
+               image_url,
+               create_time
+        from viid_face_image
+    </sql>
+
+    <select id="selectViidFaceImageList" parameterType="ViidFaceImage" resultMap="ViidFaceImageResult">
+        <include refid="selectViidFaceImageVo"/>
+        <where>
+            <if test="faceId != null  and faceId != ''">and face_id = #{faceId}</if>
+            <if test="imageId != null  and imageId != ''">and image_id = #{imageId}</if>
+            <if test="eventSort != null  and eventSort != ''">and event_sort = #{eventSort}</if>
+            <if test="deviceId != null  and deviceId != ''">and device_id = #{deviceId}</if>
+            <if test="storagePath != null  and storagePath != ''">and storage_path = #{storagePath}</if>
+            <if test="type != null  and type != ''">and type = #{type}</if>
+            <if test="fileFormat != null  and fileFormat != ''">and file_format = #{fileFormat}</if>
+            <if test="shotTime != null ">and shot_time = #{shotTime}</if>
+            <if test="width != null  and width != ''">and width = #{width}</if>
+            <if test="height != null  and height != ''">and height = #{height}</if>
+            <if test="imageUrl != null  and imageUrl != ''">and image_url = #{imageUrl}</if>
+        </where>
+    </select>
+
+    <select id="selectViidFaceImageById" parameterType="String" resultMap="ViidFaceImageResult">
+        <include refid="selectViidFaceImageVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertViidFaceImage" parameterType="ViidFaceImage">
+        insert into viid_face_image
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="faceId != null">face_id,</if>
+            <if test="imageId != null">image_id,</if>
+            <if test="eventSort != null">event_sort,</if>
+            <if test="deviceId != null">device_id,</if>
+            <if test="storagePath != null">storage_path,</if>
+            <if test="type != null">type,</if>
+            <if test="fileFormat != null">file_format,</if>
+            <if test="shotTime != null">shot_time,</if>
+            <if test="width != null">width,</if>
+            <if test="height != null">height,</if>
+            <if test="imageUrl != null">image_url,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="faceId != null">#{faceId},</if>
+            <if test="imageId != null">#{imageId},</if>
+            <if test="eventSort != null">#{eventSort},</if>
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="storagePath != null">#{storagePath},</if>
+            <if test="type != null">#{type},</if>
+            <if test="fileFormat != null">#{fileFormat},</if>
+            <if test="shotTime != null">#{shotTime},</if>
+            <if test="width != null">#{width},</if>
+            <if test="height != null">#{height},</if>
+            <if test="imageUrl != null">#{imageUrl},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateViidFaceImage" parameterType="ViidFaceImage">
+        update viid_face_image
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="faceId != null">face_id = #{faceId},</if>
+            <if test="imageId != null">image_id = #{imageId},</if>
+            <if test="eventSort != null">event_sort = #{eventSort},</if>
+            <if test="deviceId != null">device_id = #{deviceId},</if>
+            <if test="storagePath != null">storage_path = #{storagePath},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="fileFormat != null">file_format = #{fileFormat},</if>
+            <if test="shotTime != null">shot_time = #{shotTime},</if>
+            <if test="width != null">width = #{width},</if>
+            <if test="height != null">height = #{height},</if>
+            <if test="imageUrl != null">image_url = #{imageUrl},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteViidFaceImageById" parameterType="String">
+        delete
+        from viid_face_image
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteViidFaceImageByIds" parameterType="String">
+        delete from viid_face_image where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+</mapper>
